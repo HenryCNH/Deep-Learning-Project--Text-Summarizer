@@ -3,7 +3,7 @@
 This model is able to provide a summarization from large chunk of texts. The base model used in this project is 't5-small'. It is further trained by 'CNN News 3.0.0' dataset.
 
 ## Dataset Description
-Please go to the link below to download the dataset:
+Please go to the link below for the dataset:
 https://huggingface.co/datasets/cnn_dailymail/viewer/3.0.0/train
 
 ## The entire model is composed of the following parts:
