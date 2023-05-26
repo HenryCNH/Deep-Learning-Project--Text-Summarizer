@@ -1,6 +1,6 @@
 ## Deep-Learning-Project (NLP)---Text Summarizer
 
-This model is able to provide a summarization from an article. The base model used in this project is 't5-small'. It is further trained by 'CNN News 3.0.0' dataset.
+This model is able to provide a summarization from large chunk of texts. The base model used in this project is 't5-small'. It is further trained by 'CNN News 3.0.0' dataset.
 
 ## Dataset Description
 Please go to the link below to download the dataset:
