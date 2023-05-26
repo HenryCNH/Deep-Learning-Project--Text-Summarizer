@@ -10,7 +10,7 @@ https://huggingface.co/datasets/cnn_dailymail/viewer/3.0.0/train
 
 1. Importing data.
 2. Demonstrating some imported dataset.
-3. Word cleaning for EDA (Lowering all the letters and eliminating stopwords)
+3. Word cleaning for EDA (Lowering all the letters and eliminating punctuation marks and stopwords)
 4. Exploratory Data Analysis (Distribution of words in each article), (Top 10 most appeared words in the articles).
 5. Preprocessing dataset (Tokenization).
 6. Creating function to calculate 'rouge' score.
