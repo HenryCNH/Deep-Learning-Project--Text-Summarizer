@@ -10,10 +10,11 @@ https://huggingface.co/datasets/cnn_dailymail/viewer/3.0.0/train
 
 1. Importing data.
 2. Demonstrating some imported dataset.
-3. Exploratory Data Analysis (Distribution of words in each article), (Top 10 most appeared words in the articles).
-4. Preprocessing dataset (Tokenization).
-5. Creating function to calculate 'rouge' score.
-6. Defining model parameters.
-7. Compiling and training the model.
-8. Uploading the model to HuggingFace 
-9. Calling and applying the model in actual case.
+3. Word cleaning for EDA (Lowering all the letters and eliminating stopwords)
+4. Exploratory Data Analysis (Distribution of words in each article), (Top 10 most appeared words in the articles).
+5. Preprocessing dataset (Tokenization).
+6. Creating function to calculate 'rouge' score.
+7. Defining model parameters.
+8. Compiling and training the model.
+9. Uploading the model to HuggingFace 
+10. Calling and applying the model in actual case.
