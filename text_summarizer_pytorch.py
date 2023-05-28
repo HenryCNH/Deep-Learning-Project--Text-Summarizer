@@ -1,4 +1,3 @@
-
 import nltk
 import numpy as np
 import pandas as pd
@@ -120,6 +119,7 @@ args = Seq2SeqTrainingArguments(
   push_to_hub=True,
 )
 
+#Defining evaluation method
 from datasets import load_metric
 
 rouge = evaluate.load("rouge")
@@ -136,6 +136,7 @@ def compute_metrics(eval_pred):
 
   return {k: round(v, 4) for k, v in result.items()}
 
+#Building the model
 from transformers import AutoModelForSeq2SeqLM
 model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
 trainer = Seq2SeqTrainer(
@@ -152,6 +153,7 @@ trainer.train()
 
 trainer.push_to_hub()
 
+#Applying the model to an actual example
 text = "summarize: The Inflation Reduction Act lowers prescription drug costs, health care costs, and energy costs. It's the most aggressive action on tackling the climate crisis in American history, which will lift up American workers and create good-paying, union jobs across the country. It'll lower the deficit and ask the ultra-wealthy and corporations to pay their fair share. And no one making under $400,000 per year will pay a penny more in taxes."
 
 from transformers import pipeline
