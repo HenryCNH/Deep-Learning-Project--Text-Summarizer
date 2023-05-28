@@ -24,27 +24,23 @@ import nltk
 nltk.download('punkt')
 
 send_example_telemetry("summarization_notebook", framework="pytorch")
-
 from huggingface_hub import notebook_login
-
 notebook_login()
-
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 #Importing Dataset
 dataset_train=load_dataset("cnn_dailymail", '3.0.0', split='validation')
 dataset_test=load_dataset("cnn_dailymail", '3.0.0', split='test')
 print(dataset_train)
-
 tf.debugging.set_log_device_placement(True)
+
 #Exploratory Data Analysis for training dataset
 df_train=pd.DataFrame(dataset_train)
 df_train.info()
 word_count=[]
 print(df_train.head())
 
-
-#EDA - Exploring word data
+#EDA - Exploring word statistics
 for i in df_train['article']:
     count=len(i.split())
     word_count.append(count)
@@ -59,14 +55,12 @@ plt.ylabel('Density')
 plt.title('Distribution of words in each article')
 plt.show()
 
-
 #EDA - Word Frequency Analysis of training dataset article
 def clean_text(text):
     text=text.lower()
     text=re.sub("[%s]" % re.escape(string.punctuation), "", text)
     text=re.sub("([^\x00-\x7F])+", " ", text)
     return text
-
 df_train['Article_cleaned']=df_train['article'].map(lambda x : clean_text(x))
 nltk.download('stopwords')
 stop_words=set(stopwords.words('english'))
@@ -83,11 +77,10 @@ plt.ylabel('Word')
 plt.title('Top 10 most appeared words in the articles')
 plt.show()
 
-#Applying tokenization to dataset and applying model 't5-small'
+#Applying tokenization to dataset and calling model 't5-small'
 model_checkpoint='t5-small'
 tokenizer=AutoTokenizer.from_pretrained(model_checkpoint)
 prefix='summarize:'
-
 def preprocess_function(examples):
     inputs=[prefix+ i for i in examples['article']]
     model_inputs=tokenizer(inputs, max_length=2000, truncation=True)
@@ -95,10 +88,9 @@ def preprocess_function(examples):
     model_inputs['labels']=labels['input_ids']
     return model_inputs
 
-# dataset_train=df_train.to_dict('split')
+#Formatting the dataset for t5 model
 tokenized_train=dataset_train.map(preprocess_function, batched=True)
 tokenized_test=dataset_test.map(preprocess_function, batched=True)
-
 data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_checkpoint)
 
 #Setting model arguments
@@ -121,19 +113,15 @@ args = Seq2SeqTrainingArguments(
 
 #Defining evaluation metrics
 from datasets import load_metric
-
 rouge = evaluate.load("rouge")
 def compute_metrics(eval_pred):
   predictions, labels = eval_pred
   decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
   labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
   decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-
   result = rouge.compute(predictions=decoded_preds, references=decoded_labels, use_stemmer=True)
-
   prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id) for pred in predictions]
   result["gen_len"] = np.mean(prediction_lens)
-
   return {k: round(v, 4) for k, v in result.items()}
 
 #Building the model
@@ -146,18 +134,13 @@ trainer = Seq2SeqTrainer(
   eval_dataset=tokenized_test,
   data_collator=data_collator,
   tokenizer=tokenizer,
-  compute_metrics=compute_metrics
-)
-
+  compute_metrics=compute_metrics)
 trainer.train()
-
 trainer.push_to_hub()
 
 #Applying the model to an actual example
 text = "summarize: The Inflation Reduction Act lowers prescription drug costs, health care costs, and energy costs. It's the most aggressive action on tackling the climate crisis in American history, which will lift up American workers and create good-paying, union jobs across the country. It'll lower the deficit and ask the ultra-wealthy and corporations to pay their fair share. And no one making under $400,000 per year will pay a penny more in taxes."
-
 from transformers import pipeline
-
 summarizer = pipeline("summarization", model="Henry-Chan/t5-small-finetuned-CNNv2")
 summarizer(text)
 
