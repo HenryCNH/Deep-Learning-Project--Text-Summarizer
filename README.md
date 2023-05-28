@@ -17,7 +17,7 @@ https://huggingface.co/datasets/cnn_dailymail/viewer/3.0.0/train
 7. Defining model parameters.
 8. Compiling and training the model.
 9. Uploading the model to HuggingFace 
-10. Calling and applying the model in actual case.
+10. Calling and applying the model in an actual case.
 
 ## Usage:
 Please see the demonstration at the bottom of my codes
