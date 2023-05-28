@@ -9,7 +9,6 @@ import re
 import string
 import seaborn as sns
 import matplotlib.pyplot as plt
-from transformers.keras_callbacks import KerasMetricCallback
 from transformers import pipeline
 from nlp_utils import *
 from nltk.corpus import stopwords
@@ -102,6 +101,7 @@ tokenized_test=dataset_test.map(preprocess_function, batched=True)
 
 data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_checkpoint)
 
+#Setting model arguments
 from transformers import Seq2SeqTrainingArguments, Seq2SeqTrainer
 batch_size = 5
 model_name = model_checkpoint.split("/")[-1]
@@ -119,7 +119,7 @@ args = Seq2SeqTrainingArguments(
   push_to_hub=True,
 )
 
-#Defining evaluation method
+#Defining evaluation metrics
 from datasets import load_metric
 
 rouge = evaluate.load("rouge")
